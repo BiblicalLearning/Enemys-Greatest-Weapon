@@ -4,7 +4,7 @@
 
 How Sight Became the Serpent's Strategy — And How Faith Overcomes It
 
-🔗 **[Start the Study](https://biblicallearning.github.io/enemys-greatest-weapon/)**
+🔗 **[Start the Study](https://biblicallearning.github.io/Enemys-Greatest-Weapon/)**
 
 ---
 
@@ -36,7 +36,7 @@ Understanding this pattern transforms how we engage with the world around us. Wh
 
 A printable 1-page outline is included for use in Bible study groups, discipleship sessions, or personal study.
 
-🔗 **[View Printable Outline](https://biblicallearning.github.io/enemys-greatest-weapon/outline.html)**
+🔗 **[View Printable Outline](https://biblicallearning.github.io/Enemys-Greatest-Weapon/outline.html)**
 
 ---
 
