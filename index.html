@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Enemy's Greatest Weapon | Interactive Discipleship Study</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg-primary:#0a0e1a;--bg-secondary:#141b2d;--bg-tertiary:#1e2a4a;--text-primary:#f0ebe3;--accent:#c9a227;--accent-secondary:#4a6fa5;--border-color:#c9a227;--shadow:rgba(0,0,0,0.4);--success:#2d6a4f;--error:#9b2226}
+        [data-theme="light"]{--bg-primary:#ffffff;--bg-secondary:#faf8f5;--bg-tertiary:#f0ebe3;--text-primary:#1a1a1a;--accent:#1e3a5f;--accent-secondary:#8b6914;--border-color:#1e3a5f;--shadow:rgba(0,0,0,0.1)}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Cormorant Garamond',Georgia,serif;background:var(--bg-primary);color:var(--text-primary);line-height:2;font-size:20px;min-height:100vh;transition:background .3s,color .3s}
+        .header{background:linear-gradient(180deg,var(--bg-secondary) 0%,var(--bg-primary) 100%);padding:60px 20px;text-align:center;border-bottom:3px solid var(--accent);position:relative}
+        .header::before{content:'👁️';position:absolute;font-size:180px;opacity:.05;top:50%;left:50%;transform:translate(-50%,-50%)}
+        .header h1{font-family:'Cinzel',serif;font-size:clamp(1.8rem,5vw,3rem);font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:3px;margin-bottom:10px}
+        .header .subtitle{font-size:1.2rem;font-style:italic;color:var(--text-primary);opacity:.9}
+        .progress-container{position:sticky;top:0;background:var(--bg-secondary);padding:15px 20px;z-index:100;border-bottom:1px solid var(--border-color)}
+        .progress-bar{height:8px;background:var(--bg-tertiary);border-radius:4px;overflow:hidden;max-width:800px;margin:0 auto}
+        .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent-secondary),var(--accent));width:0%;transition:width .5s}
+        .progress-text{text-align:center;margin-top:8px;font-family:'Cinzel',serif;font-size:.9rem;color:var(--accent);letter-spacing:2px}
+        .container{max-width:800px;margin:0 auto;padding:45px 25px}
+        .section{display:none;animation:fadeIn .6s}
+        .section.active{display:block}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+        .section-header{text-align:center;margin-bottom:40px;padding-bottom:30px;border-bottom:1px solid var(--border-color)}
+        .section-number{font-family:'Cinzel',serif;font-size:.9rem;color:var(--accent);letter-spacing:3px;text-transform:uppercase;margin-bottom:10px}
+        .section-title{font-family:'Cinzel',serif;font-size:clamp(1.5rem,4vw,2.2rem);font-weight:600;color:var(--text-primary)}
+        h3{font-family:'Cinzel',serif;font-size:1.5rem;color:var(--accent);margin:40px 0 25px;padding-left:15px;border-left:4px solid var(--accent);line-height:1.4}
+        p{margin-bottom:24px;text-align:left;color:var(--text-primary);letter-spacing:.02em;font-weight:500}
+        .lead{font-size:1.3rem;font-style:italic;color:var(--accent);text-align:center;margin-bottom:35px;line-height:1.8}
+        strong{color:var(--accent);font-weight:700}
+        .scripture{background:linear-gradient(135deg,var(--bg-secondary) 0%,var(--bg-tertiary) 100%);border-left:5px solid var(--accent);padding:30px 35px;margin:30px 0;border-radius:0 12px 12px 0;position:relative}
+        .scripture::before{content:'"';position:absolute;top:10px;left:18px;font-size:3.5rem;color:var(--accent);opacity:.3}
+        .scripture-text{font-style:italic;font-size:1.15rem;padding-left:25px;color:var(--text-primary);line-height:2}
+        .scripture-ref{display:block;text-align:right;margin-top:18px;font-family:'Cinzel',serif;font-size:1rem;color:var(--accent);font-style:normal;font-weight:600}
+        .sight-box{background:linear-gradient(135deg,rgba(30,42,74,.4) 0%,rgba(20,27,45,.6) 100%);border-left:5px solid var(--accent-secondary);padding:25px 30px;margin:25px 0;border-radius:0 12px 12px 0;font-style:italic;color:var(--text-primary)}
+        .sight-box::before{content:'👁️';display:block;font-size:1.5rem;margin-bottom:10px}
+        .comparison-table{width:100%;border-collapse:collapse;margin:35px 0;background:var(--bg-secondary);border-radius:12px;overflow:hidden;font-size:1.1rem}
+        .comparison-table th{font-family:'Cinzel',serif;background:var(--accent-secondary);color:#f5f0e6;padding:18px 20px;text-align:left;font-weight:600}
+        .comparison-table td{padding:18px 20px;border-bottom:1px solid var(--bg-tertiary);color:var(--text-primary);line-height:1.6}
+        .comparison-table tr:last-child td{border-bottom:none}
+        .key-point{display:flex;align-items:flex-start;margin:25px 0;padding:25px;background:var(--bg-secondary);border-radius:12px;border:1px solid var(--bg-tertiary)}
+        .key-point-number{font-family:'Cinzel',serif;font-size:1.8rem;font-weight:700;color:var(--accent);margin-right:22px;min-width:45px}
+        .key-point-content strong{color:var(--accent);display:block;margin-bottom:8px;font-size:1.15rem}
+        .key-point-content{color:var(--text-primary);font-size:1.1rem;line-height:1.8}
+        .quiz-container{background:linear-gradient(135deg,var(--bg-secondary) 0%,var(--bg-primary) 100%);border:2px solid var(--accent);border-radius:16px;padding:40px;margin:50px 0}
+        .quiz-header{text-align:center;margin-bottom:35px}
+        .quiz-header h3{border:none;padding:0;margin:0;color:var(--accent)}
+        .quiz-header p{color:var(--text-primary);opacity:.8;text-align:center;margin-top:12px;font-size:1.1rem}
+        .question{margin-bottom:35px;padding-bottom:30px;border-bottom:1px solid var(--bg-tertiary)}
+        .question:last-of-type{border-bottom:none;margin-bottom:25px}
+        .question-text{font-size:1.2rem;font-weight:600;margin-bottom:20px;color:var(--text-primary);line-height:1.7}
+        .question-number{color:var(--accent);font-family:'Cinzel',serif;margin-right:12px;font-weight:700}
+        .options{display:flex;flex-direction:column;gap:14px}
+        .option{display:flex;align-items:center;padding:18px 22px;background:var(--bg-tertiary);border:2px solid transparent;border-radius:10px;cursor:pointer;transition:all .3s;color:var(--text-primary);font-size:1.1rem;line-height:1.6}
+        .option:hover{background:var(--bg-secondary);border-color:var(--border-color)}
+        .option.selected{border-color:var(--accent);background:var(--bg-secondary)}
+        .option.correct{border-color:var(--success);background:rgba(45,106,79,.2)}
+        .option.incorrect{border-color:var(--error);background:rgba(155,34,38,.2)}
+        .option input{display:none}
+        .option-marker{width:28px;height:28px;border:2px solid var(--border-color);border-radius:50%;margin-right:18px;display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;font-size:.9rem;color:var(--accent);flex-shrink:0;font-weight:600}
+        .option.selected .option-marker{background:var(--accent);color:var(--bg-primary)}
+        .quiz-result{display:none;text-align:center;padding:35px;background:var(--bg-secondary);border-radius:12px;margin-top:25px}
+        .quiz-result.show{display:block;animation:fadeIn .5s}
+        .score{font-family:'Cinzel',serif;font-size:3rem;color:var(--accent);margin-bottom:12px}
+        .score-message{font-size:1.25rem;color:var(--text-primary);margin-bottom:20px;line-height:1.6}
+        .btn{font-family:'Cinzel',serif;font-size:1.05rem;padding:16px 38px;border:2px solid var(--accent);background:transparent;color:var(--accent);cursor:pointer;border-radius:6px;letter-spacing:2px;text-transform:uppercase;transition:all .3s;margin:5px;font-weight:600}
+        .btn:hover{background:var(--accent);color:var(--bg-primary)}
+        .btn-primary{background:var(--accent);color:#0a0e1a}
+        .btn-primary:hover{background:var(--accent-secondary);color:#f5f0e6}
+        .btn:disabled{opacity:.5;cursor:not-allowed}
+        .navigation{display:flex;justify-content:center;gap:15px;margin-top:45px;flex-wrap:wrap}
+        .prayer-box{background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:12px;padding:35px;margin:35px 0;text-align:center}
+        .prayer-box h4{font-family:'Cinzel',serif;color:var(--accent);margin-bottom:22px;font-size:1.3rem}
+        .prayer-box p{font-style:italic;text-align:center;color:var(--text-primary);font-size:1.1rem;line-height:1.9}
+        .reflection-box{background:var(--bg-secondary);border:2px solid var(--accent);border-radius:12px;padding:35px;margin:40px 0}
+        .reflection-box h4{font-family:'Cinzel',serif;color:var(--accent);margin-bottom:20px;font-size:1.3rem;text-align:center}
+        .reflection-box ol{padding-left:25px}
+        .reflection-box li{margin-bottom:18px;color:var(--text-primary);font-size:1.1rem;line-height:1.8}
+        .final-results{text-align:center;padding:45px 20px}
+        .final-score{font-family:'Cinzel',serif;font-size:4.5rem;color:var(--accent);margin:25px 0}
+        .final-grade{font-size:1.6rem;margin-bottom:35px;color:var(--text-primary);line-height:1.5}
+        .section-scores{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:18px;margin:35px 0}
+        .section-score-card{background:var(--bg-secondary);border:1px solid var(--bg-tertiary);border-radius:10px;padding:22px}
+        .section-score-card h5{font-family:'Cinzel',serif;font-size:.9rem;color:var(--accent);margin-bottom:12px}
+        .section-score-card .score-value{font-size:1.6rem;color:var(--text-primary);font-weight:600}
+        .support-section{background:var(--bg-secondary);border:2px solid var(--accent);border-radius:16px;padding:40px;margin:45px 0;text-align:center}
+        .support-section h4{font-family:'Cinzel',serif;color:var(--accent);font-size:1.4rem;margin-bottom:18px}
+        .cashapp-link{display:inline-block;background:#00D632;color:#fff;padding:15px 35px;border-radius:10px;text-decoration:none;font-family:'Cinzel',serif;font-weight:600;font-size:1.1rem;margin:18px 0;transition:transform .3s}
+        .cashapp-link:hover{transform:translateY(-2px)}
+        .footer{text-align:center;padding:45px 25px;background:var(--bg-secondary);border-top:1px solid var(--border-color);margin-top:60px}
+        .footer .author{font-family:'Cinzel',serif;color:var(--accent);font-size:1.2rem;margin-bottom:12px;text-align:center}
+        .footer .tagline{font-style:italic;color:var(--text-primary);opacity:.8;margin-bottom:22px;font-size:1.1rem;text-align:center}
+        .social-link{color:var(--accent);text-decoration:none;font-family:'Cinzel',serif;font-size:1.05rem}
+        .footer-support{margin-top:25px;padding-top:25px;border-top:1px solid var(--border-color)}
+        .footer-support p{text-align:center;font-size:1rem;margin-bottom:12px;opacity:.9}
+        .footer-cashapp{color:#00D632;text-decoration:none;font-family:'Cinzel',serif;font-size:1.1rem;font-weight:600}
+        .theme-toggle{position:fixed;bottom:25px;right:25px;width:60px;height:60px;border-radius:50%;background:var(--accent);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.5rem;z-index:1000}
+        .theme-toggle:hover{transform:scale(1.1)}
+        .theme-toggle .icon-sun,.theme-toggle .icon-moon{position:absolute;transition:opacity .3s}
+        .theme-toggle .icon-sun{opacity:0}
+        .theme-toggle .icon-moon{opacity:1}
+        [data-theme="light"] .theme-toggle .icon-sun{opacity:1}
+        [data-theme="light"] .theme-toggle .icon-moon{opacity:0}
+        .challenge-text{font-size:1.4rem;text-align:center;color:var(--accent);margin:40px 0;line-height:1.8;font-weight:600}
+        .further-study-list{list-style:none;padding:0}
+        .further-study-list li{padding:14px 0;border-bottom:1px solid var(--bg-tertiary);color:var(--text-primary);font-size:1.1rem}
+        .further-study-list li:last-child{border-bottom:none}
+        @media(max-width:768px){body{font-size:18px;line-height:1.9}.header{padding:45px 20px}.header h1{font-size:1.6rem}.container{padding:30px 20px}.key-point{flex-direction:column;padding:22px}.key-point-number{margin-bottom:10px;margin-right:0}.quiz-container{padding:25px 18px}.btn{padding:14px 28px;font-size:.95rem;width:100%;margin:8px 0}.navigation{flex-direction:column}.theme-toggle{width:55px;height:55px;bottom:20px;right:20px}}
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()"><span class="icon-sun">☀️</span><span class="icon-moon">🌙</span></button>
+    <header class="header"><h1>The Enemy's Greatest Weapon</h1><p class="subtitle">Why Sight Is the Primary Tool of Spiritual Deception</p></header>
+    <div class="progress-container"><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-text" id="progressText">Section 1 of 7</div></div>
+    <main class="container">
+
+        <!-- Section 0: Welcome -->
+        <section class="section active" data-section="0">
+            <div class="section-header"><div class="section-number">Welcome</div><h2 class="section-title">The Weapon We Overlook</h2></div>
+            <div class="prayer-box"><h4>Opening Prayer</h4><p>Father, open the eyes of our hearts to see beyond what the flesh perceives. Give us discernment to recognize when the enemy uses our sight against our faith. Teach us to walk by faith and not by sight. In Jesus' name, Amen.</p></div>
+            <p class="lead">We've been warned about the lies we hear. But what about what we see? Your eyes are the enemy's most effective weapon against your faith.</p>
+            <p>We can debate what we've heard. We can question an argument. But what we've witnessed with our own eyes carries the weight of <strong>self-evident truth</strong>. And that is precisely what makes sight so dangerous as a tool of deception.</p>
+            <h3>What You'll Learn</h3>
+            <div class="key-point"><div class="key-point-number">1</div><div class="key-point-content"><strong>The Original Deception Was Visual</strong>How sight, not sound, was the serpent's primary weapon in Eden</div></div>
+            <div class="key-point"><div class="key-point-number">2</div><div class="key-point-content"><strong>Faith Over Sight</strong>Why the visible world is not the most reliable indicator of reality</div></div>
+            <div class="key-point"><div class="key-point-number">3</div><div class="key-point-content"><strong>The Narrative of Despair</strong>How the enemy uses visible chaos to paralyze the church</div></div>
+            <div class="key-point"><div class="key-point-number">4</div><div class="key-point-content"><strong>What Your Eyes Miss</strong>The hidden good that sight alone cannot perceive</div></div>
+            <div class="key-point"><div class="key-point-number">5</div><div class="key-point-content"><strong>Guard Your Eyes</strong>How to train your vision for the kingdom</div></div>
+            <div class="navigation"><button class="btn btn-primary" onclick="nextSection()">Begin Study →</button><button class="btn" onclick="window.open('https://biblicallearning.github.io/Enemys-Greatest-Weapon/outline.html','_blank')">📄 Download 1-Page Outline</button></div>
+        </section>
+
+        <!-- Section 1: The Original Deception Was Visual -->
+        <section class="section" data-section="1">
+            <div class="section-header"><div class="section-number">Part One</div><h2 class="section-title">The Original Deception Was Visual</h2></div>
+            <p class="lead">The serpent's strategy wasn't primarily verbal. It was visual.</p>
+            <p>Go back to Genesis 3. Yes, the serpent spoke to Eve. But notice the sequence carefully. The spoken word opened the door, but <strong>sight sealed the deal</strong>.</p>
+            <div class="scripture"><p class="scripture-text">"When the woman saw that the tree was good for food, and that it was a delight to the eyes, and that the tree was to be desired to make one wise, she took of its fruit and ate."</p><span class="scripture-ref">— Genesis 3:6</span></div>
+            <p>The serpent got her to <strong>look</strong>. To see. To let her eyes validate what her ears had heard. The deception worked through sight before it worked through reasoning.</p>
+            <div class="sight-box">This wasn't accidental. It was strategic. The enemy used the visible appeal of what God had forbidden to override the authority of what God had spoken. That same strategy hasn't changed.</div>
+            <h3>The Pattern of Visual Temptation</h3>
+            <p>Throughout Scripture, we see this pattern repeated. The enemy draws the eyes first, then the heart follows:</p>
+            <div class="scripture"><p class="scripture-text">"For all that is in the world — the desires of the flesh, the desires of the eyes, and the pride of life — is not from the Father but is from the world."</p><span class="scripture-ref">— 1 John 2:16</span></div>
+            <p>Notice that <strong>the desires of the eyes</strong> is listed alongside the desires of the flesh and the pride of life. Sight is a primary channel of temptation, not a secondary one.</p>
+            <div class="scripture"><p class="scripture-text">"I made a covenant with my eyes not to look lustfully at a young woman."</p><span class="scripture-ref">— Job 31:1</span></div>
+            <p>Job understood that guarding his eyes was guarding his soul. He didn't just guard his actions — he guarded <strong>where he looked</strong>.</p>
+            <h3>The Same Weapon Against Jesus</h3>
+            <p>The enemy didn't abandon this strategy when he came face to face with Christ. In the wilderness temptation, Satan used the same visual tactic:</p>
+            <div class="scripture"><p class="scripture-text">"Again, the devil took him to a very high mountain and showed him all the kingdoms of the world and their splendor. 'All this I will give you,' he said, 'if you will bow down and worship me.'"</p><span class="scripture-ref">— Matthew 4:8-9</span></div>
+            <p>Notice the sequence: he <strong>showed</strong> Him. He put it before His eyes. The enemy didn't just make an argument — he created a <strong>visual spectacle</strong> designed to bypass reasoning and appeal directly to what could be seen.</p>
+            <p>With Eve, the sight of the tree sealed the deal. With Jesus, the enemy tried the exact same play — displaying the visible glory of the world to tempt the One who created it. <strong>But Jesus responded with the Word, not with what He saw.</strong></p>
+            <div class="scripture"><p class="scripture-text">"Jesus said to him, 'Away from me, Satan! For it is written: "Worship the Lord your God, and serve him only."'"</p><span class="scripture-ref">— Matthew 4:10</span></div>
+            <p>Where Eve let sight override the Word, Jesus let <strong>the Word override sight</strong>. That's the model for every believer.</p>
+
+            <div class="quiz-container" id="quiz1"><div class="quiz-header"><h3>👁️ Check Your Understanding</h3></div>
+                <div class="question"><p class="question-text"><span class="question-number">1.</span> What was the primary channel of Eve's temptation in Genesis 3?</p><div class="options"><label class="option" data-correct="false"><input type="radio" name="q1-1"><span class="option-marker">A</span><span>The serpent's argument</span></label><label class="option" data-correct="true"><input type="radio" name="q1-1"><span class="option-marker">B</span><span>What she saw — the tree was a delight to the eyes</span></label><label class="option" data-correct="false"><input type="radio" name="q1-1"><span class="option-marker">C</span><span>The taste of the fruit</span></label></div></div>
+                <div class="question"><p class="question-text"><span class="question-number">2.</span> In 1 John 2:16, "the desires of the eyes" is listed alongside what?</p><div class="options"><label class="option" data-correct="false"><input type="radio" name="q1-2"><span class="option-marker">A</span><span>Desires of the mind and desires of the heart</span></label><label class="option" data-correct="true"><input type="radio" name="q1-2"><span class="option-marker">B</span><span>Desires of the flesh and the pride of life</span></label><label class="option" data-correct="false"><input type="radio" name="q1-2"><span class="option-marker">C</span><span>Greed and envy</span></label></div></div>
+                <div class="question"><p class="question-text"><span class="question-number">3.</span> Why did Job make a covenant with his eyes?</p><div class="options"><label class="option" data-correct="false"><input type="radio" name="q1-3"><span class="option-marker">A</span><span>He had poor vision</span></label><label class="option" data-correct="false"><input type="radio" name="q1-3"><span class="option-marker">B</span><span>It was a cultural requirement</span></label><label class="option" data-correct="true"><input type="radio" name="q1-3"><span class="option-marker">C</span><span>Guarding his eyes was guarding his soul</span></label></div></div>
+                <button class="btn btn-primary" onclick="checkQuiz(1)">Submit Answers</button><div class="quiz-result" id="result1"><div class="score" id="score1">0/3</div><p class="score-message" id="message1"></p></div>
+            </div>
+            <div class="navigation"><button class="btn" onclick="prevSection()">← Previous</button><button class="btn btn-primary" onclick="nextSection()" id="next1" disabled>Continue →</button></div>
+        </section>
+
+        <!-- Section 2: We Walk by Faith, Not by Sight -->
+        <section class="section" data-section="2">
+            <div class="section-header"><div class="section-number">Part Two</div><h2 class="section-title">We Walk by Faith, Not by Sight</h2></div>
+            <p class="lead">Paul's words are not merely devotional encouragement — they are a statement about how we know what's true.</p>
+            <div class="scripture"><p class="scripture-text">"For we walk by faith, not by sight."</p><span class="scripture-ref">— 2 Corinthians 5:7</span></div>
+            <p>This implies something profound: <strong>the visible world is not the most reliable indicator of reality.</strong></p>
+            <p>What you see is real. But it's not the whole picture. And when we let sight become our primary filter for understanding the world, we've already given ground to the enemy.</p>
+            <div class="sight-box">Your eyes see what the flesh desires. Your eyes are drawn to crisis, decay, fear. Your eyes confirm the narrative that everything is falling apart. But is that the whole truth?</div>
+            <h3>The Evidence of Things Not Seen</h3>
+            <div class="scripture"><p class="scripture-text">"Now faith is the substance of things hoped for, the evidence of things not seen."</p><span class="scripture-ref">— Hebrews 11:1</span></div>
+            <p>Faith is not blind. It sees what the flesh <strong>cannot</strong> see. Scripture defines faith itself as evidence — but evidence of <strong>invisible</strong> realities. This is the opposite of how the world thinks.</p>
+            <h3>Sight vs. Faith</h3>
+            <table class="comparison-table"><thead><tr><th>Walking by Sight</th><th>Walking by Faith</th></tr></thead><tbody><tr><td>Judges by appearances</td><td>Judges by God's Word</td></tr><tr><td>Driven by fear of what is visible</td><td>Anchored in the promise of what is unseen</td></tr><tr><td>Sees only the natural</td><td>Perceives the spiritual</td></tr><tr><td>Reacts to circumstances</td><td>Responds to covenant</td></tr></tbody></table>
+            <div class="scripture"><p class="scripture-text">"So we fix our eyes not on what is seen, but on what is unseen, since what is seen is temporary, but what is unseen is eternal."</p><span class="scripture-ref">— 2 Corinthians 4:18</span></div>
+            <p>Paul doesn't say "close your eyes." He says <strong>fix them on the unseen</strong> — redirect your gaze to what is eternal rather than temporal.</p>
+
+            <div class="quiz-container" id="quiz2"><div class="quiz-header"><h3>👁️ Check Your Understanding</h3></div>
+                <div class="question"><p class="question-text"><span class="question-number">1.</span> According to 2 Corinthians 5:7, believers should walk by:</p><div class="options"><label class="option" data-correct="false"><input type="radio" name="q2-1"><span class="option-marker">A</span><span>Sight, confirmed by faith</span></label><label class="option" data-correct="true"><input type="radio" name="q2-1"><span class="option-marker">B</span><span>Faith, not by sight</span></label><label class="option" data-correct="false"><input type="radio" name="q2-1"><span class="option-marker">C</span><span>Both equally</span></label></div></div>
+                <div class="question"><p class="question-text"><span class="question-number">2.</span> Hebrews 11:1 defines faith as evidence of what?</p><div class="options"><label class="option" data-correct="false"><input type="radio" name="q2-2"><span class="option-marker">A</span><span>Things already proven by science</span></label><label class="option" data-correct="false"><input type="radio" name="q2-2"><span class="option-marker">B</span><span>Things you can see if you look carefully</span></label><label class="option" data-correct="true"><input type="radio" name="q2-2"><span class="option-marker">C</span><span>Things not seen</span></label></div></div>
+                <div class="question"><p class="question-text"><span class="question-number">3.</span> According to 2 Corinthians 4:18, what is seen is:</p><div class="options"><label class="option" data-correct="true"><input type="radio" name="q2-3"><span class="option-marker">A</span><span>Temporary</span></label><label class="option" data-correct="false"><input type="radio" name="q2-3"><span class="option-marker">B</span><span>Eternal</span></label><label class="option" data-correct="false"><input type="radio" name="q2-3"><span class="option-marker">C</span><span>The full picture</span></label></div></div>
+                <button class="btn btn-primary" onclick="checkQuiz(2)">Submit Answers</button><div class="quiz-result" id="result2"><div class="score" id="score2">0/3</div><p class="score-message" id="message2"></p></div>
+            </div>
+            <div class="navigation"><button class="btn" onclick="prevSection()">← Previous</button><button class="btn btn-primary" onclick="nextSection()" id="next2" disabled>Continue →</button></div>
+        </section>
+
+        <!-- Section 3: The World Wants You to See Despair -->
+        <section class="section" data-section="3">
+            <div class="section-header"><div class="section-number">Part Three</div><h2 class="section-title">The Narrative of Despair</h2></div>
+            <p class="lead">The visible narrative is relentless: everything is falling apart, there is no hope.</p>
+            <p>Turn on the news. Scroll through social media. What do you see? War. Division. Disease. Corruption. Collapse.</p>
+            <p>And here's where it gets spiritually dangerous: many believers interpret this visible chaos as confirmation of their theology. They look at the decay and conclude the world is irredeemable.</p>
+            <div class="sight-box">What if the constant bombardment of visible despair is designed to keep your eyes fixed on collapse rather than covenant? On crisis rather than kingdom?</div>
+            <p>The enemy doesn't need you to stop believing in God. He just needs you to believe <strong>the world is hopeless</strong>.</p>
+            <p>Because a hopeless world doesn't need to be discipled. It just needs to be escaped.</p>
+            <h3>The Danger of Despair Theology</h3>
+            <p>When the church believes the world is beyond saving, it stops building. It stops discipling. It stops advancing the kingdom. It retreats into a bunker mentality — waiting for rescue instead of walking in authority.</p>
+            <div class="scripture"><p class="scripture-text">"The thief comes only to steal and kill and destroy; I have come that they may have life, and have it to the full."</p><span class="scripture-ref">— John 10:10</span></div>
+            <p>The enemy steals your <strong>vision</strong> for what God is doing. He kills your <strong>hope</strong> that the kingdom is advancing. He destroys your <strong>willingness</strong> to build.</p>
+            <div class="scripture"><p class="scripture-text">"Where there is no vision, the people perish."</p><span class="scripture-ref">— Proverbs 29:18</span></div>
+            <p>This isn't about eyesight — it's about <strong>prophetic vision</strong>. Without the ability to see what God is doing beyond the visible chaos, the people are unrestrained and directionless.</p>
+
+            <div class="quiz-container" id="quiz3"><div class="quiz-header"><h3>👁️ Check Your Understanding</h3></div>
+                <div class="question"><p class="question-text"><span class="question-number">1.</span> What does the enemy need you to believe about the world?</p><div class="options"><label class="option" data-correct="false"><input type="radio" name="q3-1"><span class="option-marker">A</span><span>That God doesn't exist</span></label><label class="option" data-correct="true"><input type="radio" name="q3-1"><span class="option-marker">B</span><span>That the world is hopeless</span></label><label class="option" data-correct="false"><input type="radio" name="q3-1"><span class="option-marker">C</span><span>That sin isn't real</span></label></div></div>
+                <div class="question"><p class="question-text"><span class="question-number">2.</span> A church that believes the world is beyond saving will:</p><div class="options"><label class="option" data-correct="false"><input type="radio" name="q3-2"><span class="option-marker">A</span><span>Double its evangelism efforts</span></label><label class="option" data-correct="false"><input type="radio" name="q3-2"><span class="option-marker">B</span><span>Focus on building the kingdom</span></label><label class="option" data-correct="true"><input type="radio" name="q3-2"><span class="option-marker">C</span><span>Stop building and wait for escape</span></label></div></div>
+                <div class="question"><p class="question-text"><span class="question-number">3.</span> In Proverbs 29:18, "vision" refers to:</p><div class="options"><label class="option" data-correct="false"><input type="radio" name="q3-3"><span class="option-marker">A</span><span>Physical eyesight</span></label><label class="option" data-correct="true"><input type="radio" name="q3-3"><span class="option-marker">B</span><span>Prophetic vision — seeing what God is doing</span></label><label class="option" data-correct="false"><input type="radio" name="q3-3"><span class="option-marker">C</span><span>A five-year strategic plan</span></label></div></div>
+                <button class="btn btn-primary" onclick="checkQuiz(3)">Submit Answers</button><div class="quiz-result" id="result3"><div class="score" id="score3">0/3</div><p class="score-message" id="message3"></p></div>
+            </div>
+            <div class="navigation"><button class="btn" onclick="prevSection()">← Previous</button><button class="btn btn-primary" onclick="nextSection()" id="next3" disabled>Continue →</button></div>
+        </section>
+
+        <!-- Section 4: What Your Eyes Miss -->
+        <section class="section" data-section="4">
+            <div class="section-header"><div class="section-number">Part Four</div><h2 class="section-title">What Your Eyes Miss</h2></div>
+            <p class="lead">There is far more good happening than most believers realize.</p>
+            <p>We are conditioned to see the catastrophe. We are not conditioned to see the quiet faithfulness, the slow reconciliation, the steady advance of love in dark places.</p>
+            <h3>The Visible vs. the Deeper Reality</h3>
+            <p>Consider this: a young person is dying of cancer. The family gathers in the hospital room to watch their loved one slip away. What do your eyes see? Tragedy. Loss. Brokenness.</p>
+            <p>But what is <strong>actually</strong> happening? An older family member is being ministered to in ways they never expected. They are confronting mortality. They are experiencing sacrificial love. They are seeing faith lived out under pressure.</p>
+            <table class="comparison-table"><thead><tr><th>What Eyes See</th><th>What Faith Sees</th></tr></thead><tbody><tr><td>Death and loss</td><td>Sanctification and eternal perspective</td></tr><tr><td>Suffering</td><td>Love made manifest under fire</td></tr><tr><td>Hopelessness</td><td>The conditions for transformation</td></tr></tbody></table>
+            <p>Both are real. But only one is visible in the conventional sense.</p>
+            <h3>The Paradox of Darkness and Light</h3>
+            <p>Here's something the enemy doesn't want you to understand: <strong>where there is great darkness, the conditions for light become more powerful, not less.</strong></p>
+            <div class="scripture"><p class="scripture-text">"The light shines in the darkness, and the darkness has not overcome it."</p><span class="scripture-ref">— John 1:5</span></div>
+            <p>Where there is hate, love can heal in ways that seem impossible. Where there is despair, hope can break through with greater force. Where there is death, resurrection means more.</p>
+            <div class="sight-box">The enemy shows you the darkness and says, "See? It's hopeless." But the darkness is precisely where light does its most visible work.</div>
+            <div class="scripture"><p class="scripture-text">"The people walking in darkness have seen a great light; on those living in the land of deep darkness a light has dawned."</p><span class="scripture-ref">— Isaiah 9:2</span></div>
+
+            <div class="quiz-container" id="quiz4"><div class="quiz-header"><h3>👁️ Check Your Understanding</h3></div>
+                <div class="question"><p class="question-text"><span class="question-number">1.</span> According to this lesson, where does light do its most powerful work?</p><div class="options"><label class="option" data-correct="false"><input type="radio" name="q4-1"><span class="option-marker">A</span><span>In places that are already well-lit</span></label><label class="option" data-correct="true"><input type="radio" name="q4-1"><span class="option-marker">B</span><span>In the deepest darkness</span></label><label class="option" data-correct="false"><input type="radio" name="q4-1"><span class="option-marker">C</span><span>Only in heaven</span></label></div></div>
+                <div class="question"><p class="question-text"><span class="question-number">2.</span> What does faith see in suffering that eyes alone miss?</p><div class="options"><label class="option" data-correct="true"><input type="radio" name="q4-2"><span class="option-marker">A</span><span>Sanctification, love, and eternal perspective being forged</span></label><label class="option" data-correct="false"><input type="radio" name="q4-2"><span class="option-marker">B</span><span>Nothing — suffering is always meaningless</span></label><label class="option" data-correct="false"><input type="radio" name="q4-2"><span class="option-marker">C</span><span>Proof that God has abandoned us</span></label></div></div>
+                <div class="question"><p class="question-text"><span class="question-number">3.</span> According to John 1:5, what happens when light meets darkness?</p><div class="options"><label class="option" data-correct="false"><input type="radio" name="q4-3"><span class="option-marker">A</span><span>Darkness overcomes the light</span></label><label class="option" data-correct="false"><input type="radio" name="q4-3"><span class="option-marker">B</span><span>They reach a stalemate</span></label><label class="option" data-correct="true"><input type="radio" name="q4-3"><span class="option-marker">C</span><span>The darkness has not overcome the light</span></label></div></div>
+                <button class="btn btn-primary" onclick="checkQuiz(4)">Submit Answers</button><div class="quiz-result" id="result4"><div class="score" id="score4">0/3</div><p class="score-message" id="message4"></p></div>
+            </div>
+            <div class="navigation"><button class="btn" onclick="prevSection()">← Previous</button><button class="btn btn-primary" onclick="nextSection()" id="next4" disabled>Continue →</button></div>
+        </section>
+
+        <!-- Section 5: Guard Your Eyes -->
+        <section class="section" data-section="5">
+            <div class="section-header"><div class="section-number">Part Five</div><h2 class="section-title">Guard Your Eyes</h2></div>
+            <p class="lead">If the enemy can control what you see, he can shape what you believe.</p>
+            <p>A steady diet of visible despair will erode your confidence in the kingdom. If your eyes stay fixed on collapse, you'll stop building. So we must <strong>guard our eyes</strong> — not by closing them, but by refusing to let the visible world have the final word.</p>
+            <h3>Training Different Eyes</h3>
+            <p>What would it look like to see differently? Not to deny the real brokenness of the world, but to refuse to let that brokenness be the final word.</p>
+            <div class="key-point"><div class="key-point-number">1</div><div class="key-point-content"><strong>See the marriages being restored</strong>Quiet reconciliation that never makes the news</div></div>
+            <div class="key-point"><div class="key-point-number">2</div><div class="key-point-content"><strong>See the addicts finding freedom</strong>Lives transformed in quiet recovery meetings and small groups</div></div>
+            <div class="key-point"><div class="key-point-number">3</div><div class="key-point-content"><strong>See the disciples being made</strong>In living rooms, coffee shops, and one-on-one conversations</div></div>
+            <div class="key-point"><div class="key-point-number">4</div><div class="key-point-content"><strong>See the love breaking through</strong>Generosity flowing toward the suffering, one relationship at a time</div></div>
+            <p>This isn't optimism. It's not pretending things are fine when they're not. It's <strong>faith</strong> — the substance of things hoped for, the evidence of things not seen.</p>
+            <div class="scripture"><p class="scripture-text">"I pray that the eyes of your heart may be enlightened in order that you may know the hope to which he has called you, the riches of his glorious inheritance in his holy people."</p><span class="scripture-ref">— Ephesians 1:18</span></div>
+            <p>Paul prays for <strong>the eyes of the heart</strong> — a deeper vision that perceives spiritual reality beyond what the physical eyes can see.</p>
+            <div class="scripture"><p class="scripture-text">"Open my eyes that I may see wonderful things in your law."</p><span class="scripture-ref">— Psalm 119:18</span></div>
+            <p>The kingdom of God is advancing, whether your eyes can perceive it or not. <strong>Walk by faith. See what the flesh cannot see.</strong></p>
+
+            <div class="reflection-box"><h4>Questions for Reflection</h4><ol><li>What visible narrative has most shaped your view of the world — and is it the whole truth?</li><li>Where have you let what you see override what God has spoken?</li><li>What quiet, invisible work of God can you identify in your own life or community?</li><li>How would your daily walk change if you trained your eyes to see what faith sees?</li><li>What practical steps can you take to guard your eyes from a steady diet of despair?</li></ol></div>
+
+            <div class="quiz-container" id="quiz5"><div class="quiz-header"><h3>👁️ Check Your Understanding</h3></div>
+                <div class="question"><p class="question-text"><span class="question-number">1.</span> How should believers guard their eyes?</p><div class="options"><label class="option" data-correct="false"><input type="radio" name="q5-1"><span class="option-marker">A</span><span>Close them to all reality</span></label><label class="option" data-correct="true"><input type="radio" name="q5-1"><span class="option-marker">B</span><span>Refuse to let the visible world have the final word</span></label><label class="option" data-correct="false"><input type="radio" name="q5-1"><span class="option-marker">C</span><span>Only watch Christian media</span></label></div></div>
+                <div class="question"><p class="question-text"><span class="question-number">2.</span> In Ephesians 1:18, Paul prays for what to be enlightened?</p><div class="options"><label class="option" data-correct="false"><input type="radio" name="q5-2"><span class="option-marker">A</span><span>The physical eyes</span></label><label class="option" data-correct="true"><input type="radio" name="q5-2"><span class="option-marker">B</span><span>The eyes of the heart</span></label><label class="option" data-correct="false"><input type="radio" name="q5-2"><span class="option-marker">C</span><span>The mind's intelligence</span></label></div></div>
+                <div class="question"><p class="question-text"><span class="question-number">3.</span> Seeing the hidden good in the world is described as:</p><div class="options"><label class="option" data-correct="false"><input type="radio" name="q5-3"><span class="option-marker">A</span><span>Naive optimism</span></label><label class="option" data-correct="false"><input type="radio" name="q5-3"><span class="option-marker">B</span><span>Denial of reality</span></label><label class="option" data-correct="true"><input type="radio" name="q5-3"><span class="option-marker">C</span><span>Faith — the evidence of things not seen</span></label></div></div>
+                <button class="btn btn-primary" onclick="checkQuiz(5)">Submit Answers</button><div class="quiz-result" id="result5"><div class="score" id="score5">0/3</div><p class="score-message" id="message5"></p></div>
+            </div>
+            <div class="navigation"><button class="btn" onclick="prevSection()">← Previous</button><button class="btn btn-primary" onclick="nextSection()" id="next5" disabled>Continue →</button></div>
+        </section>
+
+        <!-- Section 6: Final Exam -->
+        <section class="section" data-section="6">
+            <div class="section-header"><div class="section-number">Final Assessment</div><h2 class="section-title">Comprehensive Exam</h2></div>
+            <p class="lead">Test your complete understanding of the enemy's visual strategy.</p>
+            <div class="quiz-container" id="quizFinal"><div class="quiz-header"><h3>👁️ Final Examination</h3><p>10 questions covering all sections</p></div>
+                <div class="question"><p class="question-text"><span class="question-number">1.</span> In Genesis 3:6, what was the decisive factor in Eve's fall?</p><div class="options"><label class="option" data-correct="false"><input type="radio" name="qf-1"><span class="option-marker">A</span><span>The serpent's logic</span></label><label class="option" data-correct="true"><input type="radio" name="qf-1"><span class="option-marker">B</span><span>She saw the tree was a delight to the eyes</span></label><label class="option" data-correct="false"><input type="radio" name="qf-1"><span class="option-marker">C</span><span>Adam told her to eat</span></label></div></div>
+                <div class="question"><p class="question-text"><span class="question-number">2.</span> "We walk by faith, not by sight" implies:</p><div class="options"><label class="option" data-correct="false"><input type="radio" name="qf-2"><span class="option-marker">A</span><span>The visible world is the most reliable guide</span></label><label class="option" data-correct="true"><input type="radio" name="qf-2"><span class="option-marker">B</span><span>The visible world is not the most reliable indicator of reality</span></label><label class="option" data-correct="false"><input type="radio" name="qf-2"><span class="option-marker">C</span><span>We should ignore everything we see</span></label></div></div>
+                <div class="question"><p class="question-text"><span class="question-number">3.</span> The enemy's primary goal with visible despair is to make you believe:</p><div class="options"><label class="option" data-correct="true"><input type="radio" name="qf-3"><span class="option-marker">A</span><span>The world is hopeless and beyond saving</span></label><label class="option" data-correct="false"><input type="radio" name="qf-3"><span class="option-marker">B</span><span>God doesn't exist</span></label><label class="option" data-correct="false"><input type="radio" name="qf-3"><span class="option-marker">C</span><span>The Bible is unreliable</span></label></div></div>
+                <div class="question"><p class="question-text"><span class="question-number">4.</span> According to John 1:5, darkness:</p><div class="options"><label class="option" data-correct="false"><input type="radio" name="qf-4"><span class="option-marker">A</span><span>Has overcome the light</span></label><label class="option" data-correct="false"><input type="radio" name="qf-4"><span class="option-marker">B</span><span>Is equal to the light</span></label><label class="option" data-correct="true"><input type="radio" name="qf-4"><span class="option-marker">C</span><span>Has not overcome the light</span></label></div></div>
+                <div class="question"><p class="question-text"><span class="question-number">5.</span> Hebrews 11:1 defines faith as:</p><div class="options"><label class="option" data-correct="false"><input type="radio" name="qf-5"><span class="option-marker">A</span><span>Believing without any evidence</span></label><label class="option" data-correct="true"><input type="radio" name="qf-5"><span class="option-marker">B</span><span>The substance of things hoped for, the evidence of things not seen</span></label><label class="option" data-correct="false"><input type="radio" name="qf-5"><span class="option-marker">C</span><span>Trusting what your eyes confirm</span></label></div></div>
+                <div class="question"><p class="question-text"><span class="question-number">6.</span> Job 31:1 says Job made a covenant with his:</p><div class="options"><label class="option" data-correct="true"><input type="radio" name="qf-6"><span class="option-marker">A</span><span>Eyes</span></label><label class="option" data-correct="false"><input type="radio" name="qf-6"><span class="option-marker">B</span><span>Hands</span></label><label class="option" data-correct="false"><input type="radio" name="qf-6"><span class="option-marker">C</span><span>Tongue</span></label></div></div>
+                <div class="question"><p class="question-text"><span class="question-number">7.</span> A church that believes the world is hopeless will:</p><div class="options"><label class="option" data-correct="true"><input type="radio" name="qf-7"><span class="option-marker">A</span><span>Stop discipling and wait for escape</span></label><label class="option" data-correct="false"><input type="radio" name="qf-7"><span class="option-marker">B</span><span>Build with greater urgency</span></label><label class="option" data-correct="false"><input type="radio" name="qf-7"><span class="option-marker">C</span><span>Focus on community outreach</span></label></div></div>
+                <div class="question"><p class="question-text"><span class="question-number">8.</span> Where great darkness exists, the conditions for light become:</p><div class="options"><label class="option" data-correct="false"><input type="radio" name="qf-8"><span class="option-marker">A</span><span>Weaker</span></label><label class="option" data-correct="true"><input type="radio" name="qf-8"><span class="option-marker">B</span><span>More powerful</span></label><label class="option" data-correct="false"><input type="radio" name="qf-8"><span class="option-marker">C</span><span>Irrelevant</span></label></div></div>
+                <div class="question"><p class="question-text"><span class="question-number">9.</span> In Ephesians 1:18, Paul prays for enlightenment of:</p><div class="options"><label class="option" data-correct="false"><input type="radio" name="qf-9"><span class="option-marker">A</span><span>The physical senses</span></label><label class="option" data-correct="false"><input type="radio" name="qf-9"><span class="option-marker">B</span><span>The rational mind</span></label><label class="option" data-correct="true"><input type="radio" name="qf-9"><span class="option-marker">C</span><span>The eyes of the heart</span></label></div></div>
+                <div class="question"><p class="question-text"><span class="question-number">10.</span> Guarding your eyes means:</p><div class="options"><label class="option" data-correct="false"><input type="radio" name="qf-10"><span class="option-marker">A</span><span>Closing your eyes to all reality</span></label><label class="option" data-correct="false"><input type="radio" name="qf-10"><span class="option-marker">B</span><span>Only seeing what makes you happy</span></label><label class="option" data-correct="true"><input type="radio" name="qf-10"><span class="option-marker">C</span><span>Refusing to let the visible world have the final word on truth</span></label></div></div>
+                <button class="btn btn-primary" onclick="checkFinalQuiz()">Submit Final Exam</button><div class="quiz-result" id="resultFinal"><div class="score" id="scoreFinal">0/10</div><p class="score-message" id="messageFinal"></p></div>
+            </div>
+            <div class="navigation"><button class="btn" onclick="prevSection()">← Previous</button><button class="btn btn-primary" onclick="nextSection()" id="nextFinal" disabled>View Results →</button></div>
+        </section>
+
+        <!-- Section 7: Completion -->
+        <section class="section" data-section="7">
+            <div class="section-header"><div class="section-number">Congratulations</div><h2 class="section-title">Study Complete</h2></div>
+            <div class="final-results"><p>You completed The Enemy's Greatest Weapon</p><div class="final-score" id="totalScore">0%</div><p class="final-grade" id="finalGrade"></p><div class="section-scores" id="sectionScores"></div></div>
+            <div class="prayer-box"><h4>Closing Prayer</h4><p>Father, thank You for opening the eyes of our hearts. Help us to see beyond the visible chaos and fix our gaze on Your eternal truth. Guard our eyes from the enemy's deception, and give us the faith to perceive Your kingdom advancing in every dark place. We walk by faith, not by sight. In Jesus' name, Amen.</p></div>
+            <p class="challenge-text">"Now faith is the substance of things hoped for, the evidence of things not seen."<br><br>Guard your eyes. Walk by faith.<br>See what the flesh cannot see.<br><br><strong>The kingdom is advancing.</strong> 👁️</p>
+            <div class="scripture"><p class="scripture-text">"Now faith is the substance of things hoped for, the evidence of things not seen."</p><span class="scripture-ref">— Hebrews 11:1</span></div>
+            <div class="support-section"><h4>Support This Ministry</h4><p>If this study blessed you:</p><a href="https://cash.app/$ServingNChrist" target="_blank" class="cashapp-link">$ServingNChrist on CashApp</a></div>
+            <h3>Further Study</h3>
+            <ul class="further-study-list">
+                <li>📖 Genesis 3:1-6 — The original visual deception</li>
+                <li>📖 2 Corinthians 4:18, 5:7 — Walking by faith, not sight</li>
+                <li>📖 Hebrews 11:1 — Faith as the evidence of things not seen</li>
+                <li>📖 1 John 2:16 — The desires of the eyes</li>
+                <li>📖 John 1:5 — Light shines in darkness</li>
+                <li>📖 Ephesians 1:18 — The eyes of the heart</li>
+                <li>📖 Psalm 119:18 — Open my eyes</li>
+                <li>📖 Isaiah 9:2 — Light dawning in deep darkness</li>
+            </ul>
+            <div class="navigation"><button class="btn" onclick="restartStudy()">↺ Restart Study</button><button class="btn btn-primary" onclick="window.print()">🖨 Print Certificate</button><button class="btn" onclick="window.open('https://biblicallearning.github.io/Enemys-Greatest-Weapon/outline.html','_blank')">📄 Download 1-Page Outline</button></div>
+        </section>
+    </main>
+    <footer class="footer"><p class="author">Created by Zachariah Adams</p><p class="tagline">"Seek first the Kingdom, and watch God move mountains."</p><a href="https://x.com/ServingNChrist" target="_blank" class="social-link">@ServingNChrist on X</a><div class="footer-support"><p>Support this ministry</p><a href="https://cash.app/$ServingNChrist" target="_blank" class="footer-cashapp">$ServingNChrist on CashApp</a></div></footer>
+    <script>
+        let currentSection=0;const totalSections=8;const sectionScores={1:{correct:0,total:3,completed:false},2:{correct:0,total:3,completed:false},3:{correct:0,total:3,completed:false},4:{correct:0,total:3,completed:false},5:{correct:0,total:3,completed:false},final:{correct:0,total:10,completed:false}};
+        function toggleTheme(){const h=document.documentElement;const c=h.getAttribute('data-theme');const n=c==='light'?'dark':'light';h.setAttribute('data-theme',n);localStorage.setItem('enemys-greatest-weapon-theme',n)}
+        function initTheme(){const s=localStorage.getItem('enemys-greatest-weapon-theme');if(s)document.documentElement.setAttribute('data-theme',s)}
+        document.addEventListener('DOMContentLoaded',function(){initTheme();updateProgress();setupOptionListeners()});
+        function setupOptionListeners(){document.querySelectorAll('.option').forEach(o=>{o.addEventListener('click',function(){const q=this.closest('.question');q.querySelectorAll('.option').forEach(x=>x.classList.remove('selected'));this.classList.add('selected');this.querySelector('input').checked=true})})}
+        function nextSection(){if(currentSection<totalSections-1){document.querySelector('[data-section="'+currentSection+'"]').classList.remove('active');currentSection++;document.querySelector('[data-section="'+currentSection+'"]').classList.add('active');updateProgress();window.scrollTo({top:0,behavior:'smooth'})}}
+        function prevSection(){if(currentSection>0){document.querySelector('[data-section="'+currentSection+'"]').classList.remove('active');currentSection--;document.querySelector('[data-section="'+currentSection+'"]').classList.add('active');updateProgress();window.scrollTo({top:0,behavior:'smooth'})}}
+        function updateProgress(){const p=(currentSection/(totalSections-1))*100;document.getElementById('progressFill').style.width=p+'%';const n=['Welcome','Part 1','Part 2','Part 3','Part 4','Part 5','Final Exam','Complete'];document.getElementById('progressText').textContent=n[currentSection]+' • '+Math.round(p)+'% Complete'}
+        function checkQuiz(num){const quiz=document.getElementById('quiz'+num);const qs=quiz.querySelectorAll('.question');let c=0;qs.forEach(q=>{const s=q.querySelector('.option.selected');const os=q.querySelectorAll('.option');os.forEach(o=>{o.classList.remove('correct','incorrect');if(o.dataset.correct==='true')o.classList.add('correct')});if(s&&s.dataset.correct==='true')c++;else if(s)s.classList.add('incorrect')});sectionScores[num].correct=c;sectionScores[num].completed=true;document.getElementById('score'+num).textContent=c+'/'+sectionScores[num].total;document.getElementById('message'+num).textContent=c===sectionScores[num].total?"Perfect!":c>=2?"Good job!":"Review the material.";document.getElementById('result'+num).classList.add('show');document.getElementById('next'+num).disabled=false}
+        function checkFinalQuiz(){const quiz=document.getElementById('quizFinal');const qs=quiz.querySelectorAll('.question');let c=0;qs.forEach(q=>{const s=q.querySelector('.option.selected');const os=q.querySelectorAll('.option');os.forEach(o=>{o.classList.remove('correct','incorrect');if(o.dataset.correct==='true')o.classList.add('correct')});if(s&&s.dataset.correct==='true')c++;else if(s)s.classList.add('incorrect')});sectionScores.final.correct=c;sectionScores.final.completed=true;document.getElementById('scoreFinal').textContent=c+'/10';document.getElementById('messageFinal').textContent=c===10?"Outstanding!":c>=8?"Excellent!":c>=6?"Good effort!":"Keep studying!";document.getElementById('resultFinal').classList.add('show');document.getElementById('nextFinal').disabled=false;calculateFinalResults()}
+        function calculateFinalResults(){let tc=0,tq=0;for(let i=1;i<=5;i++){tc+=sectionScores[i].correct;tq+=sectionScores[i].total}tc+=sectionScores.final.correct;tq+=sectionScores.final.total;const pct=Math.round((tc/tq)*100);document.getElementById('totalScore').textContent=pct+'%';const g=pct>=95?'Eyes of Faith':pct>=85?'Kingdom Seer':pct>=75?'Truth Seeker':pct>=65?'Growing Disciple':'Beginning Journey';document.getElementById('finalGrade').textContent=g;const sc=document.getElementById('sectionScores');sc.innerHTML='';for(let i=1;i<=5;i++){sc.innerHTML+='<div class="section-score-card"><h5>Part '+i+'</h5><div class="score-value">'+sectionScores[i].correct+'/'+sectionScores[i].total+'</div></div>'}sc.innerHTML+='<div class="section-score-card"><h5>Final</h5><div class="score-value">'+sectionScores.final.correct+'/10</div></div>'}
+        function restartStudy(){for(let i=1;i<=5;i++)sectionScores[i]={correct:0,total:3,completed:false};sectionScores.final={correct:0,total:10,completed:false};document.querySelectorAll('.option').forEach(o=>{o.classList.remove('selected','correct','incorrect');o.querySelector('input').checked=false});document.querySelectorAll('.quiz-result').forEach(r=>r.classList.remove('show'));for(let i=1;i<=5;i++)document.getElementById('next'+i).disabled=true;document.getElementById('nextFinal').disabled=true;document.querySelector('[data-section="'+currentSection+'"]').classList.remove('active');currentSection=0;document.querySelector('[data-section="0"]').classList.add('active');updateProgress();window.scrollTo({top:0,behavior:'smooth'})}
+    </script>
+</body>
+</html>
